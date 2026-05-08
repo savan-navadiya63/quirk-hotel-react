@@ -10,6 +10,7 @@ function Contact() {
     fullName: "",
     email: "",
     phone: "",
+    roomType: "",
     message: "",
   });
 
@@ -75,8 +76,8 @@ function Contact() {
       newErrors.checkOut = "Check-out date is required";
     }
 
-    if (!formData.message.trim()) {
-      newErrors.message = "Message is required";
+    if (!formData.roomType.trim()) {
+      newErrors.roomType = "Please select a room type";
     }
 
     return newErrors;
@@ -89,25 +90,25 @@ function Contact() {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      alert("Inquiry submitted successfully!");
+      setSuccessMessage(
+        "Your stay inquiry has been sent successfully. Our team will contact you shortly.",
+      );
 
       setFormData({
         fullName: "",
         email: "",
         phone: "",
+        roomType: "",
         message: "",
       });
 
       setStartDate(null);
       setEndDate(null);
-    }
-    setSuccessMessage(
-      "Your stay inquiry has been sent successfully. Our team will contact you shortly.",
-    );
 
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 4000);
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 4000);
+    }
   };
 
   return (
@@ -227,6 +228,34 @@ function Contact() {
 
             <div>
               <label className="font-poppins mb-2 block text-sm text-white">
+                Room Type *
+              </label>
+              <select
+                name="roomType"
+                value={formData.roomType}
+                onChange={handleChange}
+                className="font-poppins w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none placeholder:text-gray-500 focus:border-[#D4AF37] appearance-none cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23D4AF37' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 12px center",
+                  paddingRight: "2.5rem",
+                }}
+              >
+                <option value="">Select a room type</option>
+                <option value="deluxe">Deluxe Room</option>
+                <option value="executive">Executive Suite</option>
+                <option value="presidential">Presidential Room</option>
+              </select>
+              {errors.roomType && (
+                <p className="font-poppins mt-2 text-sm text-red-400">
+                  {errors.roomType}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="font-poppins mb-2 block text-sm text-white">
                 Select Stay Dates
               </label>
               <DatePicker
@@ -250,7 +279,7 @@ function Contact() {
 
           <div className="mt-6">
             <label className="font-poppins mb-2 block text-sm text-white">
-              Message
+              Message (Optional)
             </label>
             <textarea
               rows="5"
@@ -260,11 +289,6 @@ function Contact() {
               placeholder="Write your message..."
               className="font-poppins w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none placeholder:text-gray-500 focus:border-[#D4AF37]"
             ></textarea>
-            {errors.message && (
-              <p className="font-poppins mt-2 text-sm text-red-400">
-                {errors.message}
-              </p>
-            )}
           </div>
 
           <button
